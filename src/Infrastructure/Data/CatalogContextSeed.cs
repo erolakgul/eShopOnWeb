@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
+using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.Extensions.Logging;
 
 namespace Microsoft.eShopWeb.Infrastructure.Data;
@@ -44,17 +45,38 @@ public class CatalogContextSeed
 
                 await catalogContext.SaveChangesAsync();
             }
+
+            if (!await catalogContext.OrderStatus.AnyAsync())
+            {
+                await catalogContext.OrderStatus.AddRangeAsync(
+                    GetPreconfiguredOrderStatus());
+
+                await catalogContext.SaveChangesAsync();
+            }
         }
         catch (Exception ex)
         {
             if (retryForAvailability >= 10) throw;
 
             retryForAvailability++;
-            
+
             logger.LogError(ex.Message);
             await SeedAsync(catalogContext, logger, retryForAvailability);
             throw;
         }
+    }
+
+    static IEnumerable<OrderStatus> GetPreconfiguredOrderStatus()
+    {
+        return new List<OrderStatus>
+            {
+                new(0,"NewOrder"),
+                new(1,"Approved"),
+                new(2,"Preparing"),
+                new(3,"Prepared"),
+                new(4,"Shipped"),
+                new(5,"Delivered")
+            };
     }
 
     static IEnumerable<CatalogBrand> GetPreconfiguredCatalogBrands()

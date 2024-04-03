@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
+﻿using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Xunit;
 
 namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Specifications;
@@ -47,13 +45,13 @@ public class CustomerOrdersWithItemsSpecification
             new List<OrderItem>
             {
                     new OrderItem(new CatalogItemOrdered(1, "Product1", "testurl"), 10.50m, 1)
-            }));
+            },0));
         ordersList.Add(new Order(_buyerId, _shipToAddress,
             new List<OrderItem>
             {
                     new OrderItem(new CatalogItemOrdered(2, "Product2", "testurl"), 15.50m, 2),
                     new OrderItem(new CatalogItemOrdered(2, "Product3", "testurl"), 20.50m, 1)
-            }));
+            },0));
 
         return ordersList;
     }

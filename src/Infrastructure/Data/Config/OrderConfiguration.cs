@@ -41,5 +41,12 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         });
 
         builder.Navigation(x => x.ShipToAddress).IsRequired();
+
+        /*order status için eklendi*/
+        builder
+            .HasOne(o => o.OrderStatus)
+            .WithOne()
+            .HasForeignKey<Order>(x => x.OrderStatusId);
+
     }
 }

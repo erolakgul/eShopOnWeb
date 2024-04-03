@@ -18,7 +18,7 @@ public class GetMyOrders
     {
         var item = new OrderItem(new CatalogItemOrdered(1, "ProductName", "URI"), 10.00m, 10);
         var address = new Address("", "", "", "", "");
-        Order order = new Order("buyerId", address, new List<OrderItem> { item });
+        Order order = new Order("buyerId", address, new List<OrderItem> { item }, 0);
               
         _mockOrderRepository.ListAsync(Arg.Any<ISpecification<Order>>(), default).Returns(new List<Order> { order });
     }

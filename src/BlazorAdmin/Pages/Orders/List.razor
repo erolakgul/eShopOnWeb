@@ -1,0 +1,50 @@
+﻿@page "/admin/order/list"
+@using BlazorShared.Models.Orders
+@attribute [Authorize(Roles = BlazorShared.Authorization.Constants.Roles.ADMINISTRATORS)]
+
+<PageTitle>eShopOnWeb Admin: Order List</PageTitle>
+
+@if (orderList == null)
+{
+    <Spinner></Spinner>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Order Date</th>
+                <th scope="col">Client</th>
+                <th scope="col">Total Amount</th>
+                <th scope="col">Order Stat.</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in orderList)
+            {
+                <tr>
+                    <th scope="row">1</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+
+    private List<Order> orderList = new();
+
+    protected override Task OnInitializedAsync()
+    {
+
+
+        return base.OnInitializedAsync();
+    }
+
+}

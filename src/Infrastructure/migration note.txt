@@ -1,0 +1,7 @@
+﻿// catalogcontext için migration oluşturma
+Add-Migration AddOrderStatus -c CatalogContext -o Data/Migrations
+Update-Database -Context CatalogContext
+
+// identitycontext için migration oluşturma
+Add-Migration AddOrderStatus -c AppIdentityDbContext -o Identity/Migrations
+Update-Database -Context AppIdentityDbContext

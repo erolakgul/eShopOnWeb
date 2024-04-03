@@ -47,7 +47,7 @@ public class OrderService : IOrderService
         }).ToList();
 
         // new order status level
-        int orderStatusId = 0;
+        int orderStatusId = 1;
 
         var order = new Order(basket.BuyerId, shippingAddress, items, orderStatusId);
 

@@ -81,7 +81,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<short>(type: "smallint", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {

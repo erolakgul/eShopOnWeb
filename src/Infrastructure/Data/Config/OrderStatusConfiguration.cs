@@ -14,7 +14,7 @@ public class OrderStatusConfiguration : IEntityTypeConfiguration<OrderStatus>
                .UseHiLo("orderstatus_hilo")
             .IsRequired();
 
-        builder.Property(cb => cb.Description)
+        builder.Property(cb => cb.Name)
            .IsRequired()
            .HasMaxLength(100);
           

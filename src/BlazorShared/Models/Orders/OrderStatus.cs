@@ -1,9 +1,10 @@
 ﻿using System;
+using BlazorShared.Attributes;
 
 namespace BlazorShared.Models.Orders;
-public class OrderStatus
+
+[Endpoint(Name = "order-status")]
+public class OrderStatus : LookupData
 {
-    public int Id { get; set; }
     public Int16 Status { get; set; }
-    public string Description { get; set; }
 }

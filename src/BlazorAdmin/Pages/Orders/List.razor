@@ -1,6 +1,10 @@
 ﻿@page "/admin/order/list"
+@using BlazorShared.Interfaces.Orders
 @using BlazorShared.Models.Orders
+
 @attribute [Authorize(Roles = BlazorShared.Authorization.Constants.Roles.ADMINISTRATORS)]
+@inherits BlazorAdmin.Helpers.BlazorComponent
+
 
 <PageTitle>eShopOnWeb Admin: Order List</PageTitle>
 
@@ -36,15 +40,22 @@ else
 }
 
 
+
 @code {
+    [Inject]
+    IOrderService _orderService { get; set; }
 
     private List<Order> orderList = new();
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender)
+        {
+            orderList = await _orderService.List();
 
-
-        return base.OnInitializedAsync();
+            CallRequestRefresh();
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
 }

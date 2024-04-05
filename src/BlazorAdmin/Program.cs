@@ -6,6 +6,7 @@ using BlazorAdmin.Services;
 using Blazored.LocalStorage;
 using BlazorShared;
 using BlazorShared.Models;
+using BlazorShared.Models.Orders;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -46,4 +47,5 @@ static async Task ClearLocalStorageCache(IServiceCollection services)
 
     await localStorageService.RemoveItemAsync(typeof(CatalogBrand).Name);
     await localStorageService.RemoveItemAsync(typeof(CatalogType).Name);
+    await localStorageService.RemoveItemAsync(typeof(OrderStatus).Name);
 }

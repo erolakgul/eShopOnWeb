@@ -29,10 +29,10 @@ else
             {
                 <tr>
                     <th scope="row">1</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>@item.OrderDate</td>
+                    <td>@item.BuyerId</td>
+                    <td>@item.TotalPrice</td>
+                    <td>@item.OrderStatus</td>
                 </tr>
             }
         </tbody>
@@ -43,16 +43,20 @@ else
 
 @code {
     [Inject]
-    IOrderService _orderService { get; set; }
+    public IOrderService _orderService { get; set; }
+
+    [Inject]
+    public IOrderLookupDataService<OrderStatus> OrderStatusService { get; set; }
 
     private List<Order> orderList = new();
+    private List<OrderStatus> orderStatusList = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            orderList = await _orderService.List();
-
+            orderList = new();//await _orderService.List();
+            orderStatusList = await OrderStatusService.List();
             CallRequestRefresh();
         }
         await base.OnAfterRenderAsync(firstRender);

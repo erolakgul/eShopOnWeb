@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
-using BlazorShared.Interfaces;
 using BlazorShared.Interfaces.Orders;
 using BlazorShared.Models.Orders;
 using Microsoft.Extensions.Logging;
@@ -12,15 +11,15 @@ namespace BlazorAdmin.Services.Orders;
 public class CachedOrderServiceDecorator : IOrderService
 {
     private readonly ILocalStorageService _localStorageService;
-    private readonly OrderService _catalogItemService;
+    private readonly OrderService _orderService;
     private ILogger<CachedOrderServiceDecorator> _logger;
 
     public CachedOrderServiceDecorator(ILocalStorageService localStorageService, 
-        OrderService catalogItemService,
+        OrderService orderService,
         ILogger<CachedOrderServiceDecorator> logger)
     {
         _localStorageService = localStorageService;
-        _catalogItemService = catalogItemService;
+        _orderService = orderService;
         _logger = logger;
     }
 
@@ -28,6 +27,7 @@ public class CachedOrderServiceDecorator : IOrderService
     {
         string key = "order-items";
         var cacheEntry = await _localStorageService.GetItemAsync<CacheEntry<List<Order>>>(key);
+
         if (cacheEntry != null)
         {
             _logger.LogInformation("Loading order items from local storage.");
@@ -42,7 +42,8 @@ public class CachedOrderServiceDecorator : IOrderService
             }
         }
 
-        var items = await _catalogItemService.List();
+        var items = await _orderService.List();
+
         var entry = new CacheEntry<List<Order>>(items);
         await _localStorageService.SetItemAsync(key, entry);
         return items;

@@ -55,7 +55,7 @@ else
     {
         if (firstRender)
         {
-            orderList = new();//await _orderService.List();
+            orderList = await _orderService.List();
             orderStatusList = await OrderStatusService.List();
             CallRequestRefresh();
         }

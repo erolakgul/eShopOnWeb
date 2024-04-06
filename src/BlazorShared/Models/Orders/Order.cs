@@ -12,7 +12,7 @@ public class Order
     public Address ShipToAddress { get;  set; }
     public decimal TotalPrice { get; set; }
      
-    public List<OrderItems> OrderItems { get; set; }
+    public List<OrderItem> OrderItems { get; set; }
 
     public decimal Total()
     {

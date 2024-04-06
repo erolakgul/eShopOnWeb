@@ -14,5 +14,5 @@ public class OrderDto
     public Address ShipToAddress { get; set; }
     public decimal TotalPrice { get; set; }
 
-    public List<OrderItemDto> OrderItemDto { get; set; }
+    public List<OrderItemDto> OrderItems { get; set; }
 }

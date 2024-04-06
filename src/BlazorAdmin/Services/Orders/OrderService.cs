@@ -23,10 +23,15 @@ public class OrderService : IOrderService
     }
     public async Task<List<Order>> List()
     {
-        _logger.LogInformation("Fetching catalog items from API.");
+        _logger.LogInformation("Fetching order items from API.");
 
+        #region lookup tan çek
         var orderStatusListTask = _orderStatusService.List();
-        var itemListTask = _httpService.HttpGet<OrderHeadResponse>($"order-items");
+        #endregion
+
+        #region api den çek
+        var itemListTask = _httpService.HttpGet<PagedOrderResponse>($"order-items"); 
+        #endregion
 
         await Task.WhenAll(orderStatusListTask, itemListTask);
 

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
-using Microsoft.eShopWeb.ApplicationCore.Specifications;
+using Microsoft.eShopWeb.ApplicationCore.Specifications.Orders;
 using Microsoft.eShopWeb.Infrastructure.Data;
 using Microsoft.eShopWeb.UnitTests.Builders;
 using Xunit;
@@ -48,7 +48,7 @@ public class GetByIdWithItemsAsync
         _catalogContext.SaveChanges();
 
         //Act
-        var spec = new OrderWithItemsByIdSpec(secondOrderId);
+        var spec = new OrderWithItemsByIdSpecification(secondOrderId);
         var orderFromRepo = await _orderRepository.FirstOrDefaultAsync(spec);
 
         //Assert

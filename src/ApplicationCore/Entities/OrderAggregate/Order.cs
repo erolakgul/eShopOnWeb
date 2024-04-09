@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ardalis.GuardClauses;
+using BlazorShared.Models;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
@@ -46,5 +47,11 @@ public class Order : BaseEntity, IAggregateRoot
             total += item.UnitPrice * item.Units;
         }
         return total;
+    }
+
+    public void UpdateStatus(int orderStatusId)
+    {
+        Guard.Against.Zero(orderStatusId, nameof(orderStatusId));
+        OrderStatusId = orderStatusId;
     }
 }

@@ -1,11 +1,11 @@
 ﻿using Ardalis.Specification;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Specifications;
+namespace Microsoft.eShopWeb.ApplicationCore.Specifications.Orders;
 
-public class OrderWithItemsByIdSpec : Specification<Order>
+public class OrderWithItemsByIdSpecification : Specification<Order>
 {
-    public OrderWithItemsByIdSpec(int orderId)
+    public OrderWithItemsByIdSpecification(int orderId)
     {
         Query
             .Where(order => order.Id == orderId)

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Ardalis.Specification;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
-using Microsoft.eShopWeb.ApplicationCore.Specifications;
+using Microsoft.eShopWeb.ApplicationCore.Specifications.Orders;
 using Microsoft.eShopWeb.Web.Features.OrderDetails;
 using NSubstitute;
 using Xunit;
@@ -21,7 +21,7 @@ public class GetOrderDetails
         var address = new Address("", "", "", "", "");
         Order order = new Order("buyerId", address, new List<OrderItem> { item },0);
                 
-        _mockOrderRepository.FirstOrDefaultAsync(Arg.Any<OrderWithItemsByIdSpec>(), default)
+        _mockOrderRepository.FirstOrDefaultAsync(Arg.Any<OrderWithItemsByIdSpecification>(), default)
             .Returns(order);
     }
 

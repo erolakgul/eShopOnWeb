@@ -37,12 +37,12 @@ public class OrderGetByIdEndPoints : IEndpoint<IResult, GetByIdOrderRequest, IRe
     {
         var response = new GetByIdOrderResponse(request.CorrelationId());
 
-        var spec = new OrderWithItemsFilterSpecification
+        var spec = new OrderWithItemsByIdSpecification
             (
               orderId : request.OrderId
             );
 
-        var item = await orderRepository.GetByIdAsync(spec);
+        var item = await orderRepository.FirstOrDefaultAsync(spec);
 
         if (item is null)
             return Results.NotFound();

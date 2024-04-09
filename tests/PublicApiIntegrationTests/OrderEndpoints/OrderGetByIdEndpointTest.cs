@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BlazorAdmin.Services;
 using BlazorShared;
 using BlazorShared.Models.Orders;
@@ -31,7 +29,7 @@ public class OrderGetByIdEndpointTest
     public async Task ReturnsItemGivenValidId()
     {
         //// Arrange
-        const int id = 3;
+        const int id = 1;
 
         //// Act
         var response = await _httpService.HttpGet<EditOrderResult>($"order-items/{id}");
@@ -45,6 +43,7 @@ public class OrderGetByIdEndpointTest
         }
         else
         {
+            System.Console.WriteLine("Sipariş bulunamadı..");
             Assert.IsNull(response);    
         }
     }

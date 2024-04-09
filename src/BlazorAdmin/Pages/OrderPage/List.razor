@@ -22,6 +22,7 @@ else
                 <th scope="col">Client</th>
                 <th scope="col">Total Amount</th>
                 <th scope="col">Order Stat.</th>
+                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -33,13 +34,27 @@ else
                     <td>@item.BuyerId</td>
                     <td>@item.TotalPrice</td>
                     <td>@item.OrderStatus</td>
+                    <td>
+                        <button @onclick="@(() => EditClick(item.Id))" @onclick:stopPropagation="true" class="btn btn-primary">
+                            Edit
+                        </button>
+                        <button @onclick:stopPropagation="true" class="btn btn-danger">
+                            Delete
+                        </button>
+
+                         @*
+                        <button @onclick="@(() => DeleteClick(item.Id))" @onclick:stopPropagation="true" class="btn btn-danger">
+                            Delete
+                        </button>
+                        *@
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 }
 
-
+<Edit OnSaveClick="ReloadOrders" OrderStatus="@orderStatusList" @ref="EditComponent"></Edit>
 
 @code {
     [Inject]
@@ -50,6 +65,8 @@ else
 
     private List<Order> orderList = new();
     private List<OrderStatus> orderStatusList = new();
+
+    private Edit EditComponent { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -62,4 +79,14 @@ else
         await base.OnAfterRenderAsync(firstRender);
     }
 
+    private async Task ReloadOrders()
+    {
+        orderList = await _orderService.List();
+        StateHasChanged();
+    }
+
+    private async Task EditClick(int id)
+    {
+        await EditComponent.Open(id);
+    }
 }

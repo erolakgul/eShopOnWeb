@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using BlazorShared.Interfaces.Orders;
@@ -21,6 +22,19 @@ public class CachedOrderServiceDecorator : IOrderService
         _localStorageService = localStorageService;
         _orderService = orderService;
         _logger = logger;
+    }
+
+    public async Task<Order> Edit(Order order)
+    {
+        var result = await _orderService.Edit(order);
+        await RefreshLocalStorageList();
+
+        return result;
+    }
+
+    public async Task<Order> GetById(int id)
+    {
+        return (await List()).FirstOrDefault(x => x.Id == id);
     }
 
     public async Task<List<Order>> List()
@@ -47,5 +61,17 @@ public class CachedOrderServiceDecorator : IOrderService
         var entry = new CacheEntry<List<Order>>(items);
         await _localStorageService.SetItemAsync(key, entry);
         return items;
+    }
+
+    private async Task RefreshLocalStorageList()
+    {
+        string key = "order-items";
+
+        await _localStorageService.RemoveItemAsync(key);
+
+        var items = await _orderService.List();
+
+        var entry = new CacheEntry<List<Order>>(items);
+        await _localStorageService.SetItemAsync(key, entry);
     }
 }

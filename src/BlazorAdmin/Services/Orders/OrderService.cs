@@ -21,6 +21,28 @@ public class OrderService : IOrderService
         _httpService = httpService;
         _logger = logger;
     }
+
+    public async Task<Order> Edit(Order order)
+    {
+        return (await _httpService.HttpPut<EditOrderResult>("order-items", order)).Order;
+    }
+
+    public async Task<Order> GetById(int id)
+    {
+        var orderStatusListTask = _orderStatusService.List();
+        var itemGetTask = _httpService.HttpGet<EditOrderResult>($"order-items/{id}");
+
+        await Task.WhenAll(orderStatusListTask, itemGetTask);
+
+        var orderStatus = orderStatusListTask.Result;
+
+        var orderItem = itemGetTask.Result.Order;
+
+        orderItem.OrderStatus = orderStatus.FirstOrDefault(b => b.Id == orderItem.OrderStatusId)?.Name;
+
+        return orderItem;
+    }
+
     public async Task<List<Order>> List()
     {
         _logger.LogInformation("Fetching order items from API.");

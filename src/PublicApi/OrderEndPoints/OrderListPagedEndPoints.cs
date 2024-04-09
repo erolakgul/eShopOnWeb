@@ -49,17 +49,8 @@ public class OrderListPagedEndPoints : IEndpoint<IResult, ListPagedOrderRequest,
 
         var items = await itemRepository.ListAsync(pagedSpec);
 
-        string msg = "";
-        try
-        {
-            response.Orders.AddRange(items.Select(_mapper.Map<OrderDto>));
-        }
-        catch (Exception ex)
-        {
-            msg = ex.Message;
-        }
-      
-
+        response.Orders.AddRange(items.Select(_mapper.Map<OrderDto>));
+  
         if (request.PageSize > 0)
         {
             response.PageCount = int.Parse(Math.Ceiling((decimal)totalItems / request.PageSize).ToString());

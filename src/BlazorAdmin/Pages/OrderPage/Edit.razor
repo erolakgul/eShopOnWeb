@@ -1,0 +1,148 @@
+﻿@inject ILogger<Edit> Logger
+@inject IJSRuntime JSRuntime
+@inject IOrderService OrderService
+
+@inherits BlazorAdmin.Helpers.BlazorComponent
+
+@namespace BlazorAdmin.Pages.OrderPage
+
+<div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <EditForm Model="_item" OnValidSubmit="@SaveClick">
+                <DataAnnotationsValidator />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit @_item.BuyerId</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    @if (_item == null)
+                    {
+                        <Spinner></Spinner>
+                    }
+                    else
+                    {
+                        <div class="container">
+                            <div class="row">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in OrderItem)
+                                        {
+                                            <tr>
+                                                <th scope="row">@item.Id</th>
+                                                <td>@item.ItemOrdered.ProductName</td>
+                                                <td>@item.Units</td>
+                                                <td>@item.UnitPrice</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-6">OrderStatus</label>
+                                        <div class="col-md-12">
+                                            <CustomInputSelect @bind-Value="_item.OrderStatusId" class="form-control">
+                                                @foreach (var orderStat in OrderStatus)
+                                                {
+                                                    <option value="@orderStat.Id.ToString()">@orderStat.Name</option>
+                                                }
+                                            </CustomInputSelect>
+                                            <ValidationMessage For="(() => _item.OrderStatusId)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-6">Order Status</label>
+                                        <div class="col-md-12">
+                                            <InputNumber @bind-Value="_item.OrderStatusId" class="form-control" />
+                                            <ValidationMessage For="(() => _item.OrderStatusId)" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+            </EditForm>
+
+
+        </div>
+    </div>
+</div>
+
+@if (_showEditModal)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    [Parameter]
+    public IEnumerable<OrderStatus> OrderStatus { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSaveClick { get; set; }
+
+    private Order _item = new();
+    public List<OrderItem> OrderItem { get; set; }
+
+    private string _badFileMessage = string.Empty;
+    private string _modalDisplay = "none;";
+    private string _modalClass = "";
+    private bool _showEditModal = false;
+
+    private async Task SaveClick()
+    {
+        await OrderService.Edit(_item);
+        await OnSaveClick.InvokeAsync(null);
+        await Close();
+    }
+
+    public async Task Open(int id)
+    {
+        Logger.LogInformation("Now loading... /Order/Edit/{Id}", id);
+
+        await new Css(JSRuntime).HideBodyOverflow();
+
+        _item = await OrderService.GetById(id);
+        OrderItem = _item.OrderItems;
+
+        _modalDisplay = "block;";
+        _modalClass = "Show";
+        _showEditModal = true;
+
+        StateHasChanged();
+    }
+
+    private async Task Close()
+    {
+        await new Css(JSRuntime).ShowBodyOverflow();
+
+        _modalDisplay = "none";
+        _modalClass = "";
+        _showEditModal = false;
+    }
+
+}

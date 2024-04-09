@@ -30,7 +30,7 @@ public class MappingProfile : Profile
             //               => options.MapFrom(src => src.ShipToAddress));
         CreateMap<Address, BlazorShared.Models.Orders.Address>();
         CreateMap<OrderItem, OrderItemDto>();
-        CreateMap<CatalogItemOrdered,BlazorShared.Models.Orders.CatalogItemOrdered> ();
+        CreateMap<CatalogItemOrdered, CatalogItemOrderedDto> ();
         #endregion
     }
 }
